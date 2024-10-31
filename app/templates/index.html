@@ -11,10 +11,17 @@
     <style>
         body { font-family: 'Open Sans', Arial, sans-serif; }
         html,body {padding:0;}
-        body {padding:64px;padding-top:16px;}
+        body {    
+            padding: 64px;
+            margin: 0 auto;
+            max-width: 1024px;
+        }
         table { flex:1; border-collapse: collapse; }
         th, td { padding: 16px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #f2f2f2; }
+        td { padding: 0; }
+        th, .cell { padding: 16px}
+        .centre { text-align:center; }
+        th { background-color: #f2f2f2; white-space:nowrap; }
         .table-container {
             width:100%;
             display:flex;
@@ -35,13 +42,16 @@
 <body>
     <h1>URL Status Monitor</h1>
     <div class="table-container">
-        <table id="statusTable">
+        <table>
             <tr>
-                <th>URL</th>
+                <th style="width:100%">URL</th>
                 <th>Status</th>
                 <th>Response Code</th>
                 <th>Last Checked</th>
             </tr>
+            <tbody id="statusTable">
+
+            </tbody>
             <!-- Rows will be populated here -->
         </table>
     </div>
@@ -51,24 +61,26 @@
             const response = await fetch("status");
             const status = await response.json();
             const table = document.getElementById("statusTable");
-            table.innerHTML = `<tr>
-                <th>URL</th>
-                <th>Status</th>
-                <th>Response Code</th>
-                <th>Last Checked</th>
-            </tr>`;
+            table.innerHTML = "";
+
             for (const url in status) {
                 var urlStatus = status[url]
 
-                // Parse timestamp as UTC
+                // Parse timestamp as UTC and adjust to local time
                 const lastCheckedUtc = new Date(status[url].last_checked);
 
-                // Adjust to local time by adding the timezone offset
-                const localTime = new Date(lastCheckedUtc.getTime() - lastCheckedUtc.getTimezoneOffset() * 60000);
+                // Define formatting options
+                const timeOptions = { hour: 'numeric', minute: '2-digit' };
+                const dateOptions = { day: 'numeric', month: 'short' };
+                const fullDateOptions = { ...dateOptions, year: 'numeric', ...timeOptions };
 
-                // Format as d MMM yyyy
-                const options = { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' };
-                const localTimeString = lastCheckedUtc.toLocaleDateString(undefined, options);
+                // Format time components
+                const nowDateString = new Date().toLocaleDateString(undefined, dateOptions);
+                const dateString = lastCheckedUtc.toLocaleDateString(undefined, dateOptions);
+                const timeString = lastCheckedUtc.toLocaleTimeString(undefined, timeOptions);
+
+                // Determine display format
+                let localTimeString = dateString === nowDateString ? timeString : `${dateString}, ${timeString}`;
 
 
                 const row = document.createElement("tr");
@@ -88,10 +100,10 @@
                         row.style.fontWeight = "700"
                     }
                 }
-                row.innerHTML = `<td>${url}</td>
-                                 <td>${urlStatus.status ? "Up" : "Down"}</td>
-                                 <td>${urlStatus.code}</td>
-                                 <td>${localTimeString}</td>`;
+                row.innerHTML = `<td><a href="${url}" class="cell">${url}</a></td>
+                                 <td class="cell centre">${urlStatus.status ? "Up" : "Down"}</td>
+                                 <td class="cell centre">${urlStatus.code}</td>
+                                 <td class="cell centre">${localTimeString}</td>`;
                 table.appendChild(row);
             }
         }
