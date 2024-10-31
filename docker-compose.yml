@@ -10,6 +10,7 @@ services:
       - URL_2=https://www.amazon.com.au/
       - CHECK_INTERVAL=10  # Set check interval in seconds
       - LOG_LEVEL=DEBUG
+      - BASE_PATH=/
     volumes:
       - data:/app/data
       - ./app:/app:ro

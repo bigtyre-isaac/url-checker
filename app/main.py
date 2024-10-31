@@ -6,6 +6,9 @@ import logging
 from filelock import FileLock
 
 app = Flask(__name__)
+
+base_path = os.getenv("BASE_PATH", "/")
+
 data_path = "./data/status.json"
 lock_path = "./data/status.json.lock"  # Lock file path
 
@@ -15,18 +18,18 @@ logging.basicConfig(level=getattr(logging, log_level, logging.INFO), format='%(a
 logger = logging.getLogger(__name__)
 
 def load_status():
-    with FileLock(lock_path):
-        try:
-            with open(data_path, "r") as f:
-                return json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError) as e:
-            logger.warning(f"Could not load status data: {e}")
-            return {}
+  with FileLock(lock_path):
+    try:
+      with open(data_path, "r") as f:
+        return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+      logger.warning(f"Could not load status data: {e}")
+      return {}
 
 @app.route("/")
 def index():
     status = load_status()
-    return render_template("index.html", status=status)
+    return render_template("index.html", status=status, base_path=base_path)
 
 @app.route("/status")
 def status():

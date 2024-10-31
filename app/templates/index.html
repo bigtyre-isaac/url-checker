@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="{{ base_path }}">
     <title>URL Status Monitor</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,7 +48,7 @@
         
     <script>
         async function fetchStatus() {
-            const response = await fetch("/status");
+            const response = await fetch("status");
             const status = await response.json();
             const table = document.getElementById("statusTable");
             table.innerHTML = `<tr>
