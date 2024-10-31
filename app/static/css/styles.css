@@ -1,0 +1,35 @@
+body { font-family: 'Open Sans', Arial, sans-serif; }
+html,body {padding:0;}
+body {    
+    padding: 64px;
+    margin: 0 auto;
+    max-width: 1024px;
+}
+table { flex:1; border-collapse: collapse; }
+th, td { padding: 16px; text-align: left; border-bottom: 1px solid #ddd; }
+td { padding: 0; }
+th, .cell { padding: 16px}
+.centre { text-align:center; }
+th { background-color: #f2f2f2; white-space:nowrap; }
+.table-container {
+    width:100%;
+    display:flex;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #EEE;
+}
+h1 {
+    margin-bottom: 32px;
+    font-weight: 100;
+    font-size: 2em;
+    margin-top: 0;
+    color: #888;
+}
+a { text-decoration:none; color:inherit; }
+
+.cell-content {
+    background:transparent;
+    width:100%;
+    display:inline-block;
+}
