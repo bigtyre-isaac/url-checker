@@ -1,0 +1,19 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: dockerfile.dev
+    ports:
+      - "5000:5000"
+      - "8000:8000"
+    environment:
+      - URL_1=https://google.com/
+      - URL_2=https://amazon.com/
+      - CHECK_INTERVAL=60  # Set check interval in seconds
+    volumes:
+      - data:/app/data
+      - ./app:/app:ro
+
+volumes:
+  data:
+    driver: local
