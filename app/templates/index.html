@@ -66,8 +66,8 @@
                 const localTime = new Date(lastCheckedUtc.getTime() - lastCheckedUtc.getTimezoneOffset() * 60000);
 
                 // Format as d MMM yyyy
-                const options = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
-                const localTimeString = localTime.toLocaleDateString(undefined, options);
+                const options = { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' };
+                const localTimeString = lastCheckedUtc.toLocaleDateString(undefined, options);
 
 
                 const row = document.createElement("tr");
@@ -95,7 +95,7 @@
             }
         }
 
-        //setInterval(fetchStatus, 5000); // Refresh every 5 seconds
+        setInterval(fetchStatus, 5000); // Refresh every 5 seconds
         fetchStatus(); // Initial fetch
     </script>
 </body>

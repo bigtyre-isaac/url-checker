@@ -7,8 +7,9 @@ services:
       - "8000:8000"
     environment:
       - URL_1=https://google.com/
-      - URL_2=https://amazon.com/
-      - CHECK_INTERVAL=60  # Set check interval in seconds
+      - URL_2=https://www.amazon.com.au/
+      - CHECK_INTERVAL=10  # Set check interval in seconds
+      - LOG_LEVEL=DEBUG
     volumes:
       - data:/app/data
       - ./app:/app:ro
