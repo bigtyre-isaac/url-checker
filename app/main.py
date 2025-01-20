@@ -7,7 +7,6 @@ from filelock import FileLock
 
 app = Flask(__name__)
 
-base_path = os.getenv("BASE_PATH", "/")
 
 data_path = "./data/status.json"
 lock_path = "./data/status.json.lock"  # Lock file path
@@ -16,6 +15,10 @@ lock_path = "./data/status.json.lock"  # Lock file path
 log_level = os.getenv("LOG_LEVEL", "INFO").upper()
 logging.basicConfig(level=getattr(logging, log_level, logging.INFO), format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+logger.info("Application started.")
+base_path = os.getenv("BASE_PATH", "/")
+logger.info("Using base path: '{base_path}'")
 
 def load_status():
   with FileLock(lock_path):
