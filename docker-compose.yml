@@ -8,6 +8,7 @@ services:
     environment:
       - URL_1=https://google.com/
       - URL_2=https://www.amazon.com.au/
+      - URL_3=https://asidjioas.example.com.asudi/
       - CHECK_INTERVAL=10  # Set check interval in seconds
       - LOG_LEVEL=DEBUG
       - BASE_PATH=/
