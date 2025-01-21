@@ -1,9 +1,9 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, Response
 import json
 import os
 import logging
 from filelock import FileLock
-from prometheus_client import make_wsgi_app, Gauge, CollectorRegistry
+from prometheus_client import make_wsgi_app, Gauge, CollectorRegistry, generate_latest
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
 app = Flask(__name__)
@@ -36,18 +36,20 @@ def load_status():
 
 @app.route("/")
 def index():
-    status = load_status()
-    return render_template("index.html", status=status, base_path=base_path)
+  status = load_status()
+  return render_template("index.html", status=status, base_path=base_path)
 
 @app.route("/status")
 def status():
-    status = load_status()
-    return jsonify(status)
+  status = load_status()
+  return jsonify(status)
 
-# Add route for Prometheus metrics
-app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
-    '/metrics': make_wsgi_app(registry)
-})
+@app.route('/metrics')
+def metrics():
+  # Ensure we load and update status right before producing metrics
+  load_status()
+  # Generate Prometheus metrics from the registry
+  return Response(generate_latest(registry), mimetype="text/plain")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
